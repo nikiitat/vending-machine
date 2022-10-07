@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { getVendingMachine } from "../controllers/vendingMachineController";
+import { getProducts, buyProductById } from "../controllers/vendingMachineController";
 import asyncHandler from "../middleware/asyncHandler";
 
 const router = Router();
 
-router.get("/", asyncHandler(getVendingMachine));
+router.get("/products-list", asyncHandler(getProducts));
+
+router.get("/product", asyncHandler(buyProductById));
 
 export default router;
