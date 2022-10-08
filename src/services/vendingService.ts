@@ -1,5 +1,5 @@
-import { products, coins } from "../db/data";
-import { Product, Change, Coins, Money } from "../db/types";
+import { coins } from "../db/data";
+import { Change, Coins, Product } from "../db/types";
 
 function handleOrder(product: Product, cash: number): Change {
   const change = calculateChange(cash, product!);
@@ -30,20 +30,26 @@ const calculateChange = (cash: number, product: Product) => {
   let changeDue = cash - product.price;
   let credit = cash - changeDue;
 
+  if (credit > 0) {
+    updateBalance(change, credit);
+  }
+
   [200, 100, 50, 20, 10, 5, 2, 1].forEach((n) => {
     let num = Math.floor(changeDue / n);
-    changeDue = changeDue % n;
-    change[n as keyof Change]! += num;
+    if (coins[n as keyof Coins].units >= num) {
+      changeDue = changeDue % n;
+      change[n as keyof Change]! += num;
+      coins[n as keyof Coins].units -= num;
+    }
   });
-
-  updateBalance(change, credit);
 
   const returnChange: Change = {};
 
   for (const key in change) {
     if (change[key as unknown as keyof Change] !== 0) {
       let priceName = coins[key as unknown as keyof Change].name;
-      returnChange[priceName as unknown as keyof Change] = change[key as unknown as keyof Change];
+      returnChange[priceName as unknown as keyof Change] =
+        change[key as unknown as keyof Change];
     }
   }
 
@@ -55,10 +61,6 @@ const updateBalance = (change: Change, credit: number) => {
     let num = Math.floor(credit / n);
     credit = credit % n;
     coins[n as keyof Coins].units += num;
-  });
-
-  Object.entries(change).forEach(([k, v]) => {
-    coins[k as unknown as keyof Change].units -= v;
   });
 };
 
