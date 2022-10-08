@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "d9481af6-f3e6-44a3-9c08-575e1d316cc8",
+		"name": "vendingMachine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-Products-List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/vending-machine/products-list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"vending-machine",
+						"products-list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-Products Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/vending-machine/product?name=Coca+Cola&cash=340",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"vending-machine",
+						"product"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Coca+Cola"
+						},
+						{
+							"key": "cash",
+							"value": "340"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reload products",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Vending_Admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"name\": \"Coca Cola\",\n        \"price\": 320,\n        \"units\": 12,\n        \"maxUnits\": 20\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/vending-machine/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"vending-machine",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reload coins",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Vending_Admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"1\": {\n        \"name\": \"1p\",\n        \"price\": 1,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"2\": {\n        \"name\": \"2p\",\n        \"price\": 2,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"5\": {\n        \"name\": \"5p\",\n        \"price\": 5,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"10\": {\n        \"name\": \"10p\",\n        \"price\": 10,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"20\": {\n        \"name\": \"20p\",\n        \"price\": 20,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"50\": {\n        \"name\": \"50p\",\n        \"price\": 50,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"100\": {\n        \"name\": \"1£\",\n        \"price\": 100,\n        \"units\": 3,\n        \"maxUnits\": 50\n    },\n    \"200\": {\n        \"name\": \"2£\",\n        \"price\": 200,\n        \"units\": 3,\n        \"maxUnits\": 50\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/vending-machine/coins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"vending-machine",
+						"coins"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
