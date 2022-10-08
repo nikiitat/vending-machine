@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 
-import { products } from "../db/data";
+import { coins, products } from "../db/data";
+import { Coins, Product } from "../db/types";
+import { BadRequest } from "../middleware/errorHandler";
 import vendingMachineService from "../services/vendingService";
 
 const getProducts = async (req: Request, res: Response) => {
+  console.log(coins);
   const data = products.map((item) => {
     return { name: item.name, price: item.price };
   });
@@ -25,7 +28,23 @@ const buyProductByName = async (req: Request, res: Response) => {
 
   const change = vendingMachineService.handleOrder(product!, cash);
 
-  res.json({ product: { name: product!.name }, change });
+  res.status(200).json({ product: { name: product!.name }, change });
 };
 
-export { getProducts, buyProductByName };
+const reloadProducts = async ({ body }: Request, res: Response) => {
+  const newProducts: Product[] = body;
+
+  vendingMachineService.reloadProducts(newProducts);
+
+  res.status(200).json(products);
+};
+
+const reloadCoins = async (req: Request, res: Response) => {
+  const newCoins = req.body as Coins;
+
+  vendingMachineService.reloadCoins(newCoins);
+
+  res.status(200).json(coins);
+};
+
+export { getProducts, buyProductByName, reloadProducts, reloadCoins };
