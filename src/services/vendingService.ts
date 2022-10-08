@@ -5,7 +5,7 @@ import { BadRequest } from "../middleware/errorHandler";
 function reloadCoins(newCoins: Coins) {
   Object.keys(coins).forEach((coin) => {
     if (!newCoins.hasOwnProperty(coin))
-      throw new BadRequest(`Property "${coin}" is not provideded`);
+      throw new BadRequest(`Property is not provideded`);
 
     coins[coin as unknown as keyof Coins] =
       newCoins[coin as unknown as keyof Coins];

@@ -26,7 +26,7 @@
 			"response": []
 		},
 		{
-			"name": "get-Products Copy",
+			"name": "buy Product",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -49,6 +49,36 @@
 						{
 							"key": "cash",
 							"value": "340"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy Product not enough money",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/vending-machine/product?name=Coca+Cola&cash=140",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"vending-machine",
+						"product"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Coca+Cola"
+						},
+						{
+							"key": "cash",
+							"value": "140"
 						}
 					]
 				}

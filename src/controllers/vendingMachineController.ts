@@ -6,9 +6,8 @@ import { BadRequest } from "../middleware/errorHandler";
 import vendingMachineService from "../services/vendingService";
 
 const getProducts = async (req: Request, res: Response) => {
-  console.log(coins);
-  const data = products.map((item) => {
-    return { name: item.name, price: item.price };
+  const data = products.filter((item) => {
+    if (item.units > 0) return { name: item.name, price: item.price };
   });
 
   res.json(data);
