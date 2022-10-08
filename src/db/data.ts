@@ -1,37 +1,6 @@
-export type Product = {
-  name: string;
-  price: number;
-  units: number;
-  maxUnits: number;
-};
+import { Product, Coins } from "./types";
 
-export enum Money {
-  "1p" = 1,
-  "2p" = 2,
-  "5p" = 5,
-  "10p" = 10,
-  "20p" = 20,
-  "50p" = 50,
-  "1£" = 100,
-  "2£" = 200,
-}
-
-export type Change = {
-  [key in Money]?: number;
-};
-
-export type Coins = {
-  [key in Money]: Coin;
-};
-
-type Coin = {
-  name: string;
-  price: number;
-  units: number;
-  maxUnits: number;
-};
-
-export const data: Product[] = [
+export const products: Product[] = [
   {
     name: "Coca Cola",
     price: 320,
