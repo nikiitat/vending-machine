@@ -1,5 +1,5 @@
 import { coins, products } from "../../db/data";
-import { Coins } from "../../db/types";
+import { Coins, Product } from "../../db/types";
 import { BadRequest } from "../../middleware/errorHandler";
 import vendingMachineService from "../vendingService";
 
@@ -22,6 +22,24 @@ describe("vendingMachineService tests", () => {
         maxUnits: 20,
       },
     ]);
+  });
+
+  test("verify invalid products can not be reloaded", () => {
+    try {
+      vendingMachineService.reloadProducts([
+        {
+          name: "Coca Cola",
+          price: 320,
+          units: 12,
+        } as Product,
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new BadRequest(
+          "Product should have 4 fieds: name, price, units and maxUnits"
+        )
+      );
+    }
   });
 
   test("verify coins can be reloaded", () => {
@@ -81,7 +99,7 @@ describe("vendingMachineService tests", () => {
     expect(coins).toStrictEqual(newCoins);
   });
 
-  test("verify coins NOT reloaded", () => {
+  test("verify 1 coin is missing in coins", () => {
     const newCoins = {
       "2": {
         name: "2p",
@@ -130,7 +148,72 @@ describe("vendingMachineService tests", () => {
     try {
       vendingMachineService.reloadCoins(newCoins as Coins);
     } catch (error) {
-      expect(error).toStrictEqual(new BadRequest("Property is not provideded"));
+      expect(error).toStrictEqual(
+        new BadRequest(`Change "1" is not provideded`)
+      );
+    }
+  });
+
+  test("verify coin is missing maxUnits field", () => {
+    const newCoins = {
+      "1": {
+        name: "1p",
+        price: 1,
+        units: 3,
+        s: 50,
+      },
+      "2": {
+        name: "2p",
+        price: 2,
+        units: 3,
+        maxUnits: 50,
+      },
+      "5": {
+        name: "5p",
+        price: 5,
+        units: 3,
+        maxUnits: 50,
+      },
+      "10": {
+        name: "10p",
+        price: 10,
+        units: 3,
+        maxUnits: 50,
+      },
+      "20": {
+        name: "20p",
+        price: 20,
+        units: 3,
+        maxUnits: 50,
+      },
+      "50": {
+        name: "50p",
+        price: 50,
+        units: 3,
+        maxUnits: 50,
+      },
+      "100": {
+        name: "1£",
+        price: 100,
+        units: 3,
+        maxUnits: 50,
+      },
+      "200": {
+        name: "2£",
+        price: 200,
+        units: 3,
+        maxUnits: 50,
+      },
+    };
+
+    try {
+      vendingMachineService.reloadCoins(newCoins as unknown as Coins);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new BadRequest(
+          `Coin "maxUnits" is not provideded in {"name":"1p","price":1,"units":3,"s":50}`
+        )
+      );
     }
   });
 

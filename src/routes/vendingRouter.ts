@@ -17,8 +17,8 @@ router.get("/product", asyncHandler(buyProductByName));
 
 router.use(auth);
 
-router.patch("/products", asyncHandler(reloadProducts));
+router.put("/products", asyncHandler(reloadProducts));
 
-router.patch("/coins", asyncHandler(reloadCoins));
+router.put("/coins", asyncHandler(reloadCoins));
 
 export default router;

@@ -3,18 +3,28 @@ import { Change, Coins, Product } from "../db/types";
 import { BadRequest } from "../middleware/errorHandler";
 
 function reloadCoins(newCoins: Coins) {
-  Object.keys(coins).forEach((coin) => {
+  Object.entries(coins).forEach(([coin, coinValue]) => {
     if (!newCoins.hasOwnProperty(coin))
-      throw new BadRequest(`Property is not provideded`);
+      throw new BadRequest(`Change "${coin}" is not provideded`);
+
+    Object.keys(coinValue).forEach((value) => {
+      Object.values(newCoins).forEach((newCoin) => {
+        if (!newCoin.hasOwnProperty(value))
+          throw new BadRequest(
+            `Coin "${value}" is not provideded in ${JSON.stringify(newCoin)}`
+          );
+      });
+    });
 
     coins[coin as unknown as keyof Coins] =
       newCoins[coin as unknown as keyof Coins];
   });
 }
 
-function reloadProducts(newP: Product[]) {
+function reloadProducts(newProducts: Product[]) {
+  validateProductsSchema(newProducts);
   products.length = 0;
-  products.push(...newP);
+  products.push(...newProducts);
 }
 
 function handleOrder(product: Product, cash: number): Change {
@@ -24,6 +34,20 @@ function handleOrder(product: Product, cash: number): Change {
 
   return changeToMap;
 }
+
+const validateProductsSchema = (newProducts: Product[]) => {
+  const productSchema = ["name", "price", "units", "maxUnits"];
+  newProducts.forEach((obj) => {
+    if (Object.keys(obj).length !== productSchema.length)
+      throw new BadRequest(
+        "Product should have 4 fieds: name, price, units and maxUnits"
+      );
+    Object.keys(obj).forEach((key) => {
+      if (!productSchema.includes(key))
+        throw new BadRequest(`Property "${key}" is not valid`);
+    });
+  });
+};
 
 const validateProduct = (name: string, cash: number, product?: Product) => {
   return product && product?.units > 0 ? true : false;
@@ -52,20 +76,19 @@ const calculateChange = (cash: number, product: Product) => {
 
   [200, 100, 50, 20, 10, 5, 2, 1].forEach((n) => {
     let num = Math.floor(changeDue / n);
-    if (coins[n as keyof Coins].units >= num) {
+    if (coins[n].units >= num) {
       changeDue = changeDue % n;
-      changeToMap[n as keyof Change]! += num;
-      coins[n as keyof Coins].units -= num;
+      changeToMap[n]! += num;
+      coins[n].units -= num;
     }
   });
 
   const change: Change = {};
 
   for (const key in changeToMap) {
-    if (changeToMap[key as unknown as keyof Change] !== 0) {
-      let priceName = coins[key as unknown as keyof Change].name;
-      change[priceName as unknown as keyof Change] =
-        changeToMap[key as unknown as keyof Change];
+    if (changeToMap[key] !== 0) {
+      let priceName = coins[key].name;
+      change[priceName] = changeToMap[key];
     }
   }
 

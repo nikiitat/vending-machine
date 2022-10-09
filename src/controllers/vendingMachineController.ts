@@ -7,10 +7,14 @@ import vendingMachineService from "../services/vendingService";
 
 const getProducts = async (req: Request, res: Response) => {
   const data = products.filter((item) => {
-    if (item.units > 0) return { name: item.name, price: item.price };
+    if (item.units > 0) return item;
   });
 
-  res.json(data);
+  const result = data.map((item) => {
+    return { name: item.name, price: item.price };
+  });
+
+  res.json(result);
 };
 
 const buyProductByName = async (req: Request, res: Response) => {

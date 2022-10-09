@@ -103,7 +103,7 @@
 						}
 					]
 				},
-				"method": "PATCH",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -147,7 +147,7 @@
 						}
 					]
 				},
-				"method": "PATCH",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
